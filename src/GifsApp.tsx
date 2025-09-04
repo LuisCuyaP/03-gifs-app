@@ -5,43 +5,40 @@ import { CustomHeader } from "./shared/components/CustomHeader"
 import { PreviousSearch } from "./shared/components/PreviousSearch"
 import { SearchBar } from "./shared/components/SearchBar"
 
-interface ItemGif {
-    id?: string;
-    url?: string;
-    title?: string;
-    width?: number;
-    height?: number;
-}
-
-
-
-
 export const GifsApp = () => {
 
-    const [previousTerms, setPreviousTerms] = useState(['dragon ball']);
+    const [previousTerms, setPreviousTerms] = useState<string[]>([]);
 
     const handleTermClicked = (term: string) => {
-        console.log({term});
+        console.log({ term });
     }
 
-    const handleSearch = (query: string) => {
-        console.log({query});
-    }
+    const handleSearch = async (query: string = '') => {
+        query = query.trim().toLowerCase();
 
-    return(
+        if (query.length === 0) return;
+
+        if (previousTerms.includes(query)) return;
+
+        setPreviousTerms([query, ...previousTerms].splice(0, 8));
+
+    };
+
+
+    return (
         <>
 
-        {/* header */}
-        <CustomHeader title="Buscador de Gifs" description="Descubre y comparte el Gif perfecto" />
+            {/* header */}
+            <CustomHeader title="Buscador de Gifs" description="Descubre y comparte el Gif perfecto" />
 
-        {/* search */}
-        <SearchBar placeholder="Buscar gifs..." onQuery={handleSearch} />
+            {/* search */}
+            <SearchBar placeholder="Buscar gifs..." onQuery={handleSearch} />
 
-        {/* previous searches */}
-        <PreviousSearch searches={['Goku', 'Dragon Ball']} onLabelClicked={(term: string) => handleTermClicked(term)} />
+            {/* previous searches */}
+            <PreviousSearch searches={previousTerms} onLabelClicked={handleTermClicked} />
 
-        {/* gifs */}
-        <GifList gifs={mockGifs} />
+            {/* gifs */}
+            <GifList gifs={mockGifs} />
 
         </>
     )
