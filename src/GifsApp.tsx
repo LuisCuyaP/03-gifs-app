@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { mockGifs } from "./data/gifs.mock"
 import { GifList } from "./gifs/GifList"
 import { CustomHeader } from "./shared/components/CustomHeader"
@@ -16,6 +17,13 @@ interface ItemGif {
 
 
 export const GifsApp = () => {
+
+    const [previousTerms, setPreviousTerms] = useState(['dragon ball']);
+
+    const handleTermClicked = (term: string) => {
+        console.log({term});
+    }
+
     return(
         <>
 
@@ -26,7 +34,7 @@ export const GifsApp = () => {
         <SearchBar placeholder="Buscar gifs..." />
 
         {/* previous searches */}
-        <PreviousSearch searches={['Goku', 'Dragon Ball']} />
+        <PreviousSearch searches={['Goku', 'Dragon Ball']} onLabelClicked={(term: string) => handleTermClicked(term)} />
 
         {/* gifs */}
         <GifList gifs={mockGifs} />
